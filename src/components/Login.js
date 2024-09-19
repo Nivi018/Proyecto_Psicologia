@@ -5,59 +5,79 @@ import axios from 'axios';
 export const Login = () => {
   const navigate = useNavigate();
 
-  
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState(null);// To store any errors
+  const [formData, setFormData] = useState({ email: '', password: '' });
+  const [error, setError] = useState(null);
 
+  // Verifica si el usuario ya está autenticado al montar el componente
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      navigate('/agenda', { replace: true });
+    }
+  }, [navigate]);
+
+  // Manejar el cambio en los inputs
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
 
   const onLogin = async (e) => {
     e.preventDefault();
+    setError(null); // Limpiar errores previos
 
     try {
+      const { email, password } = formData;
       const response = await axios.post('http://localhost:3000/api/users/login', {
-        
         email,
         password,
       });
 
-      if (response.data.success) {
-        localStorage.setItem('token', response.data.token); // Store token for future requests
+      if (response.data?.success) {
+        localStorage.setItem('token', response.data.token);
         navigate('/agenda', {
           replace: true,
           state: {
             logged: true,
-            // Assuming you have user data in the response
-            // Adjust this according to your actual response structure
             email: response.data.user?.email,
           },
         });
       } else {
-        setError(response.data.message); // Set error message from backend
+        setError(response.data?.message || 'Error en el servidor.');
       }
-    } catch (error) {
-      console.error(error);
-      setError('Error al iniciar sesión');
+    } catch (err) {
+      // Verificar si hay errores del cliente o del servidor
+      if (err.response) {
+        // Errores del servidor
+        setError(err.response.data?.message || 'Error en el servidor.');
+      } else {
+        // Errores de red o cliente
+        setError('Error de red. Verifique su conexión.');
+      }
+      console.error(err);
     }
   };
-
 
   return (
     <div className='wrapper'>
       <form onSubmit={onLogin}>
-        <h1>Iniciar Sesion</h1>
+        <h1>Iniciar Sesión</h1>
 
         <div className="input-group">
           <input
             type="email"
             name="email"
             id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={formData.email}
+            onChange={handleInputChange}
             required
             autoComplete="off"
+            aria-label="Email"
           />
-          <label htmlFor='email'>Email:</label>
+          <label htmlFor="email">Email:</label>
         </div>
 
         <div className="input-group">
@@ -65,16 +85,17 @@ export const Login = () => {
             type="password"
             name="password"
             id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            value={formData.password}
+            onChange={handleInputChange}
             required
             autoComplete="off"
+            aria-label="Contraseña"
           />
-          <label htmlFor='password'>Contraseña:</label>
+          <label htmlFor="password">Contraseña:</label>
         </div>
 
-        {error && <p className="error">{error}</p>} {/* Display error message if any */}
-        <button>Iniciar Sesion</button>
+        {error && <p className="error">{error}</p>} {/* Mostrar mensaje de error */}
+        <button type="submit">Iniciar Sesión</button>
       </form>
     </div>
   );

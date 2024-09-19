@@ -9,9 +9,10 @@ export const HeaderNav = () => {
     
     console.log(state);
 
-    const onLogout = () =>{
-        navigate('/login', {replace: true})
-    }
+    const onLogout = () => {
+        localStorage.removeItem('token'); // Eliminar token del localStorage
+        navigate('/login', { replace: true }); // Redirigir a la pantalla de login
+      };
 
 
   return (
@@ -30,6 +31,9 @@ export const HeaderNav = () => {
                 <ul>
                 <li>
                     <NavLink to="/agenda" className={({isActive})=> isActive ? "active": ""}>Agenda</NavLink>
+                </li>
+                <li>
+                    <NavLink to="/expediente" className={({isActive})=> isActive ? "active": ""}>Expediente</NavLink>
                 </li>        
                 <button className='btn-logout' onClick={onLogout}>Cerrar sesion</button>
                     
@@ -60,9 +64,7 @@ export const HeaderNav = () => {
                 <li>
                     <NavLink to="/agenda" className={({isActive})=> isActive ? "active": ""}>Agenda</NavLink>
                 </li> 
-                <li>
-                    <NavLink to="/expediente" className={({isActive})=> isActive ? "active": ""}>Expediente</NavLink>
-                </li>
+                
                 
             </ul>
         </nav>
