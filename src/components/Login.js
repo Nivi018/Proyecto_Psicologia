@@ -38,7 +38,7 @@ export const Login = () => {
 
       if (response.data?.success) {
         localStorage.setItem('token', response.data.token);
-        navigate('/agenda', {
+        navigate('/expediente', {
           replace: true,
           state: {
             logged: true,

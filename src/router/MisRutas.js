@@ -30,10 +30,11 @@ export const MisRutas = () => {
             <Route path="/portafolio" element={<Portafolio />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/expediente" element={<Expediente />}/>
+            
+            <Route path='/agenda' element={<Agend/>}/>
 
             <Route element={<RutasPrivadas/>}>
-            <Route path='/agenda' element={<Agend/>}/>
+            <Route path="/expediente" element={<Expediente />}/>
             
             </Route>
             

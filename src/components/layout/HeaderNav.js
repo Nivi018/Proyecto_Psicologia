@@ -30,9 +30,6 @@ export const HeaderNav = () => {
             <nav>
                 <ul>
                 <li>
-                    <NavLink to="/agenda" className={({isActive})=> isActive ? "active": ""}>Agenda</NavLink>
-                </li>
-                <li>
                     <NavLink to="/expediente" className={({isActive})=> isActive ? "active": ""}>Expediente</NavLink>
                 </li>        
                 <button className='btn-logout' onClick={onLogout}>Cerrar sesion</button>
