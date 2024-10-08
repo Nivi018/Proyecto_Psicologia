@@ -75,7 +75,7 @@ code {
 
 .header .active,
 .header a:hover {
-  color: #29b4fa; 
+  color: #03700c; 
 }
 
 .content {
@@ -161,7 +161,7 @@ code {
 }
 
 .home strong{
-  color: #29b4fa;
+  color: #03700c;
 }
 
 .home h2{
@@ -174,7 +174,7 @@ code {
   padding: 7px;
   border-radius: 15px;
   color: white;
-  background-color:  #29b4fa;
+  background-color:  #03700c;
   text-decoration: none;
   transition: all 300ms;
   
@@ -241,7 +241,7 @@ button{
   border: 0px;
   border-radius: 5px;
   color: white;
-  background-color: #29b4fa;
+  background-color: #03700c;
   text-decoration: none;
   transition: all 300ms;
 }
@@ -299,7 +299,7 @@ flex-basis: 35%;
 }
 
 .work-item a:hover{
-  color: #29b4fa;
+  color: #03700c;
 }
 
 .work-item h3{
