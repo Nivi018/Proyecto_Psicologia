@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useForm } from '../hook/useForm'; // Assuming useForm hook handles form state
+import { useForm } from '../hook/useForm'; 
 import axios from 'axios';
 
 export const Register = () => {
@@ -9,7 +9,7 @@ export const Register = () => {
 
   const { formValues, onInputChange, resetForm } = useForm({
     no_control: '',
-    name: '',
+    nombre: '',
     apellido: '',
     edad: '',
     carrera: '',
@@ -20,7 +20,7 @@ export const Register = () => {
 
   const {
     no_control,
-    name,
+    nombre,
     apellido,
     edad,
     carrera,
@@ -35,15 +35,15 @@ export const Register = () => {
     try {
       const response = await axios.post('http://localhost:3000/api/users/create', formValues); // Send all formValues
 
-      if (response.data.success) { // Assuming backend response indicates success
+      if (response.data.success) { 
         navigate('/agenda', {
           replace: true,
           state: {
             logged: true,
-            name: formValues.name, // Use appropriate key from formValues
-          },
+            name: formValues.nombre, 
+            },
         });
-        resetForm(); // Clear form data after successful registration
+        resetForm(); 
       } else {
         setError(response.data.error || 'Error al registrar el usuario. Por favor, intenta de nuevo más tarde.'); // Handle specific error message from backend if available
       }
@@ -73,14 +73,14 @@ export const Register = () => {
         <div className="input-group">
           <input 
             type="text" 
-            name="name" 
-            id="name" 
-            value={name} 
+            name="nombre"  
+            id="nombre" 
+            value={nombre} 
             onChange={onInputChange}
             required 
             autoComplete="off"
           />
-          <label htmlFor='name'>Nombre:</label>
+          <label htmlFor='nombre'>Nombre:</label>
         </div>
 
         <div className="input-group">
