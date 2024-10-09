@@ -19,7 +19,7 @@ export const Login = () => {
   // Manejar el cambio en los inputs
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({
+    setFormData((prevData) => ({  
       ...prevData,
       [name]: value,
     }));
