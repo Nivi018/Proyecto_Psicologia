@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route, BrowserRouter, NavLink, Navigate } from "react-router-dom";
+import { Routes, Route, BrowserRouter, Navigate } from "react-router-dom";
 import { Inicio } from '../components/Inicio';
 import { Contacto } from '../components/Contacto';
 import { Curriculum } from '../components/Curriculum';
@@ -14,41 +14,43 @@ import { Agend } from '../components/Agend';
 import { Expediente } from '../components/Expediente';
 
 export const MisRutas = () => {
-  
-
   return (
-      <BrowserRouter>
-        
-        <HeaderNav />
+    <BrowserRouter>
+      <HeaderNav />
 
-        <section className="content">
-          <Routes>
-            <Route path="/" element={<Navigate to="/inicio" />} />
-            <Route path="/inicio" element={<Inicio />} />
-            <Route path="/contacto" element={<Contacto />} />
-            <Route path="/curriculum" element={<Curriculum />} />
-            <Route path="/portafolio" element={<Portafolio />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            
-            <Route path='/agenda' element={<Agend/>}/>
+      <section className="content">
+        <Routes>
+          {/* Rutas públicas */}
+          <Route path="/" element={<Navigate to="/inicio" />} />
+          <Route path="/inicio" element={<Inicio />} />
+          <Route path="/contacto" element={<Contacto />} />
+          <Route path="/curriculum" element={<Curriculum />} />
+          <Route path="/portafolio" element={<Portafolio />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
 
-            <Route element={<RutasPrivadas/>}>
-            <Route path="/expediente" element={<Expediente />}/>
-            
-            </Route>
-            
+          {/* Rutas privadas */}
+          <Route element={<RutasPrivadas />}>
+            <Route path="/agenda" element={<Agend />} />
+            <Route path="/expediente" element={<Expediente />} />
+          </Route>
 
-            <Route path="/proyecto/:id" element={<Proyecto />} />
-            <Route path="*" element={
-              <div className='page'>
-                <h1 className='heading'>Error 404</h1>
+          {/* Ruta para proyectos con parámetros */}
+          <Route path="/proyecto/:id" element={<Proyecto />} />
+
+          {/* Ruta por defecto para manejar errores 404 */}
+          <Route
+            path="*"
+            element={
+              <div className="page">
+                <h1 className="heading">Error 404</h1>
               </div>
-            } />
-          </Routes>
-        </section>
+            }
+          />
+        </Routes>
+      </section>
 
-        <Footer />
-      </BrowserRouter>
+      <Footer />
+    </BrowserRouter>
   );
 };

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import {InputField} from './common/ InputField';
+import {ErrorMessage} from './common/ErrorMessage';
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -19,7 +21,7 @@ export const Login = () => {
   // Manejar el cambio en los inputs
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({  
+    setFormData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
@@ -27,7 +29,7 @@ export const Login = () => {
 
   const onLogin = async (e) => {
     e.preventDefault();
-    setError(null); // Limpiar errores previos
+    setError(null); 
 
     try {
       const { email, password } = formData;
@@ -49,12 +51,9 @@ export const Login = () => {
         setError(response.data?.message || 'Error en el servidor.');
       }
     } catch (err) {
-      // Verificar si hay errores del cliente o del servidor
       if (err.response) {
-        // Errores del servidor
         setError(err.response.data?.message || 'Error en el servidor.');
       } else {
-        // Errores de red o cliente
         setError('Error de red. Verifique su conexión.');
       }
       console.error(err);
@@ -62,39 +61,33 @@ export const Login = () => {
   };
 
   return (
-    <div className='wrapper'>
+    <div className="wrapper">
       <form onSubmit={onLogin}>
         <h1>Iniciar Sesión</h1>
 
-        <div className="input-group">
-          <input
-            type="email"
-            name="email"
-            id="email"
-            value={formData.email}
-            onChange={handleInputChange}
-            required
-            autoComplete="off"
-            aria-label="Email"
-          />
-          <label htmlFor="email">Email:</label>
-        </div>
+        {/* Input de Email */}
+        <InputField
+          label="Email"
+          type="email"
+          name="email"
+          value={formData.email}
+          onChange={handleInputChange}
+          required
+        />
 
-        <div className="input-group">
-          <input
-            type="password"
-            name="password"
-            id="password"
-            value={formData.password}
-            onChange={handleInputChange}
-            required
-            autoComplete="off"
-            aria-label="Contraseña"
-          />
-          <label htmlFor="password">Contraseña:</label>
-        </div>
+        {/* Input de Contraseña */}
+        <InputField
+          label="Contraseña"
+          type="password"
+          name="password"
+          value={formData.password}
+          onChange={handleInputChange}
+          required
+        />
 
-        {error && <p className="error">{error}</p>} {/* Mostrar mensaje de error */}
+        {/* Mostrar mensaje de error */}
+        <ErrorMessage message={error} />
+
         <button type="submit">Iniciar Sesión</button>
       </form>
     </div>

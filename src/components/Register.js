@@ -16,9 +16,10 @@ export const Register = () => {
     semestre: '',
     email: '',
     password: '',
+    rol: 'user', 
   });
 
-  const {
+  const { 
     no_control,
     nombre,
     apellido,
@@ -26,13 +27,15 @@ export const Register = () => {
     carrera,
     semestre,
     email,
-    password
+    password,
+    rol
   } = formValues;
 
   const onRegister = async (e) => {
     e.preventDefault();
 
     try {
+      console.log(formValues)
       const response = await axios.post('http://localhost:3000/api/users/create', formValues); // Send all formValues
 
       if (response.data.success) { 
@@ -41,11 +44,11 @@ export const Register = () => {
           state: {
             logged: true,
             name: formValues.nombre, 
-            },
+          },
         });
         resetForm(); 
       } else {
-        setError(response.data.error || 'Error al registrar el usuario. Por favor, intenta de nuevo más tarde.'); // Handle specific error message from backend if available
+        setError(response.data.error || 'Error al registrar el usuario. Por favor, intenta de nuevo más tarde.');
       }
     } catch (error) {
       setError('Error al registrar el usuario. Por favor, intenta de nuevo más tarde.');
@@ -160,6 +163,22 @@ export const Register = () => {
           />
           <label htmlFor='password'>Contraseña:</label>
         </div>
+
+        {/* Campo adicional para el rol */}
+        <div className="input-group">
+          <select 
+            name="rol" 
+            id="rol" 
+            value={rol} 
+            onChange={onInputChange} 
+            required
+          >
+            <option value="user">Usuario</option>
+            <option value="admin">Administrador</option>
+          </select>
+          <label htmlFor='rol'>Rol:</label>
+        </div>
+
         <button>Registrar</button>
       </form>
       {error && <p>{error}</p>}

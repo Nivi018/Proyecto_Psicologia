@@ -1,9 +1,8 @@
-import {Navigate, useLocation, Outlet} from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
 
-export const RutasPrivadas = ({children}) => {
+export const RutasPrivadas = () => {
+  // Verificar si el usuario está autenticado
+  const isAuthenticated = !!localStorage.getItem('token');
 
-    const {state} = useLocation()
-
-
-  return state?.logged ? <Outlet/> : <Navigate to='/login'  />;
-}; 
+  return isAuthenticated ? <Outlet /> : <Navigate to="/login" />;
+};
