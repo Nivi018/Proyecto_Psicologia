@@ -35,7 +35,7 @@ code {
 .header .logo span {
   display: block;
   font-size: 90px;
-  font-weight:bolder;
+  font-weight: bolder;
   margin-top: -30px;
 }
 
@@ -151,82 +151,67 @@ code {
   }
 }
 
-.home h1{
+.home h1 {
   font-family: Georgia, 'Times New Roman', Times, serif;
   font-weight: 400;
   font-size: 60px;
   margin-bottom: 0px;
   margin-top: 80px;
-
 }
 
-.home strong{
+.home strong {
   color: #03700c;
 }
 
-.home h2{
+.home h2 {
   color: rgb(98, 97, 97);
   font-weight: lighter;
   font-size: 32px;
 }
 
-.home .title a{
-  padding: 7px;
-  border-radius: 15px;
-  color: white;
-  background-color:  #03700c;
-  text-decoration: none;
-  transition: all 300ms;
-  
-
+.home .title {
+  display: flex;
+  justify-content: center; /* Centrar horizontalmente */
+  align-items: center; /* Centrar verticalmente */
+  margin-top: 20px; /* Espacio superior */
 }
 
-.home .title a:hover,
-input[type="submit"]:hover,
-button:hover{
-  background-color:  rgb(211, 214, 211);
+.home .title a {
+  padding: 15px 30px; /* Mayor padding */
+  border-radius: 5px; /* Bordes redondeados */
   color: white;
-  
+  background-color: #03700c;
+  text-decoration: none;
+  transition: background-color 300ms, color 300ms;
+}
+
+.home .title a:hover {
+  background-color: rgb(211, 214, 211); /* Color de fondo al pasar el mouse */
+  color: #03700c; /* Color del texto */
 }
 
 .page .heading,
-.home .heading{
+.home .heading {
   font-size: 38px;
   font-weight: 500;
   font-style: italic;
   color: black;
   margin-bottom: 0px;
-} 
-
-.page .heading{
-  font-size: 55px;
-  font-weight: bold;
 }
 
-.home p{
+.page .heading {
+  font-size: 55px;
+}
+
+.home p {
   color: rgb(98, 97, 97);
   font-size: 15px;
 }
 
-
 input[type="text"],
-textarea{
-  display: block;
-  padding: 15px;
-  margin-top: 15px;
-  width: 250px;
-}
-
 input[type="email"],
-textarea{
-  display: block;
-  padding: 15px;
-  margin-top: 15px;
-  width: 250px;
-}
-
 input[type="password"],
-textarea{
+textarea {
   display: block;
   padding: 15px;
   margin-top: 15px;
@@ -234,9 +219,9 @@ textarea{
 }
 
 input[type="submit"],
-button{
+button {
   font-size: 15px;
-  padding: 15px;
+  padding: 15px 30px; /* Mayor padding lateral */
   margin-top: 15px;
   border: 0px;
   border-radius: 5px;
@@ -246,19 +231,24 @@ button{
   transition: all 300ms;
 }
 
-.works{
+input[type="submit"]:hover,
+button:hover {
+  background-color: rgb(211, 214, 211);
+  color: #03700c; /* Mantener el contraste */
+}
+
+.works {
   display: flex;
   flex-wrap: wrap;
 }
 
-.work-item{
-flex-basis: 35%;
+.work-item {
+  flex-basis: 35%;
   flex-grow: 1;
-
   margin: 30px;
 }
 
-.work-item .mask{
+.work-item .mask {
   width: 100%;
   height: 350px;
   overflow: hidden;
@@ -266,25 +256,24 @@ flex-basis: 35%;
   box-shadow: 0px 5px 25px gray;
 }
 
-.work-item img{
+.work-item img {
   width: 100%;
   transition: all 500ms;
 }
 
-.work-item .mask:hover img{
+.work-item .mask:hover img {
   width: 150%;
-  transform: scale( 1);
+  transform: scale(1);
   margin-right: 30%;
-
 }
 
-.work-item span{
+.work-item span {
   display: block;
   color: gray;
   margin-top: 35px;
 }
 
-.work-item h2{
+.work-item h2 {
   font-size: 30px;
   display: block;
   color: black;
@@ -292,17 +281,17 @@ flex-basis: 35%;
   margin-bottom: 10px;
 }
 
-.work-item a{
+.work-item a {
   color: black;
   text-decoration: none;
   transition: all 300ms;
 }
 
-.work-item a:hover{
+.work-item a:hover {
   color: #03700c;
 }
 
-.work-item h3{
+.work-item h3 {
   display: block;
   margin-top: 0px; 
   padding-top: 15px;
@@ -310,7 +299,7 @@ flex-basis: 35%;
   border-top: 1px solid #ddd;
 }
 
-.page-work .mask{
+.page-work .mask {
   height: 300px;
   overflow: hidden;
   box-shadow: 0px 0px 20px #ccc;
