@@ -43,7 +43,6 @@ export const Expediente = () => {
 
         Sexo:
         <select
-          
           name="sexo"
           value={formData.sexo}
           onChange={handleChange}
@@ -54,6 +53,7 @@ export const Expediente = () => {
           <option value="femenino">Femenino</option>
           <option value="otro">Otro</option>
         </select><br/>
+
         <input
           type="number"
           placeholder="Edad"
@@ -64,6 +64,7 @@ export const Expediente = () => {
           min="0"
           max="100"
         /><br/>
+
         Estado Civil:
         <select
           name="estadoCivil"
@@ -76,7 +77,8 @@ export const Expediente = () => {
           <option value="casado">Casado</option>
           <option value="divorciado">Divorciado</option>
           <option value="viudo">Viudo</option>
-        </select>
+        </select><br/>
+
         <input
           type="text"
           placeholder="Dirección"
@@ -84,16 +86,19 @@ export const Expediente = () => {
           value={formData.direccion}
           onChange={handleChange}
           required
-        />
+        /><br/>
+
         <input
           type="tel"
-          placeholder="Teléfono"
+          placeholder="Teléfono (10 dígitos)"
           name="telefono"
           value={formData.telefono}
           onChange={handleChange}
           required
           pattern="[0-9]{10}"
-        />
+          title="El número debe contener exactamente 10 dígitos."
+        /><br/>
+
         <input
           type="text"
           placeholder="Ingeniería"
@@ -101,7 +106,8 @@ export const Expediente = () => {
           value={formData.ingenieria}
           onChange={handleChange}
           required
-        />
+        /><br/>
+
         <input
           type="text"
           placeholder="Modalidad"
@@ -109,7 +115,8 @@ export const Expediente = () => {
           value={formData.modalidad}
           onChange={handleChange}
           required
-        />
+        /><br/>
+
         <input
           type="number"
           placeholder="Semestre"
@@ -119,7 +126,8 @@ export const Expediente = () => {
           required
           min="1"
           max="12"
-        />
+        /><br/>
+
         <input
           type="text"
           placeholder="Número de control"
@@ -128,7 +136,8 @@ export const Expediente = () => {
           onChange={handleChange}
           required
         /><br/>
-        fecha de Registro:
+
+        Fecha de Registro:
         <input
           type="date"
           name="fechaRegistro"
@@ -136,6 +145,7 @@ export const Expediente = () => {
           onChange={handleChange}
           required
         /><br/>
+
         <input
           type="number"
           placeholder="Número de sesiones"
@@ -145,9 +155,9 @@ export const Expediente = () => {
           required
           min="0"
         /><br/>
+
         <input type="submit" value="Generar Expediente" />
       </form>
     </div>
   );
 };
-

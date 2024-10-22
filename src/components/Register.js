@@ -28,7 +28,6 @@ export const Register = () => {
     semestre,
     email,
     password,
-    rol
   } = formValues;
 
   const onRegister = async (e) => {
@@ -164,21 +163,7 @@ export const Register = () => {
           <label htmlFor='password'>Contraseña:</label>
         </div>
 
-        {/* Campo adicional para el rol */}
-        <div className="input-group">
-          <select 
-            name="rol" 
-            id="rol" 
-            value={rol} 
-            onChange={onInputChange} 
-            required
-          >
-            <option value="user">Usuario</option>
-            <option value="admin">Administrador</option>
-          </select>
-          <label htmlFor='rol'>Rol:</label>
-        </div>
-
+       
         <button>Registrar</button>
       </form>
       {error && <p>{error}</p>}

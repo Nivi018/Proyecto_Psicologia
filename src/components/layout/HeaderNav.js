@@ -1,37 +1,43 @@
 import React from 'react';
-import { NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 export const HeaderNav = () => {
   const token = localStorage.getItem('token'); 
-  const { state } = useLocation();
+  const role = localStorage.getItem('role'); // Obtener el rol del localStorage
   const navigate = useNavigate();
 
-  console.log(state);
-
   const onLogout = () => {
-    localStorage.removeItem('token'); 
-    navigate('/login', { replace: true }); 
+    localStorage.removeItem('token');
+    localStorage.removeItem('role'); // Limpiar el rol al cerrar sesión
+    navigate('/login', { replace: true });
   };
 
   return (
     <header className="header">
-      <div className="logo">
-        <span>Ψ</span>
+      <div className="logo" aria-label="Logo del Departamento de Psicología">
+        <span aria-hidden="true">Ψ</span>
         <h3>Departamento de Psicología</h3>
       </div>
 
-      {token ? ( 
+      {token ? (
         <div className="user">
           <nav>
             <ul>
-              <li>
-                <NavLink
-                  to="/expediente"
-                  className={({ isActive }) => (isActive ? 'active' : '')}
-                >
-                  Expediente
-                </NavLink>
-              </li>
+              {/* Rutas comunes para todos los usuarios logueados */}
+              {role === 'admin' && ( 
+                <>
+                  <li>
+                    <NavLink
+                      to="/expediente"
+                      className={({ isActive }) => (isActive ? 'active' : '')}
+                    >
+                      Expediente
+                    </NavLink>
+                  </li>
+
+                  {/*qui puedes colocar los NacLink para las rutas de los demas modulos de administrador */}
+                </>
+              )}
               <li>
                 <NavLink
                   to="/agenda"
@@ -40,11 +46,13 @@ export const HeaderNav = () => {
                   Agenda
                 </NavLink>
               </li>
-              <button className="btn-logout" onClick={onLogout}>
-                Cerrar sesión
-              </button>
+
+              {/*aqui colocas las rutas de navLink de las rutas para usuario */}
             </ul>
           </nav>
+          <button className="btn-logout" onClick={onLogout}>
+            Cerrar sesión
+          </button>
         </div>
       ) : (
         <nav>

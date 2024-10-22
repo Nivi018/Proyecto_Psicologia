@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
@@ -12,6 +12,15 @@ export const Agend = () => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [eventTitle, setEventTitle] = useState('');
   const [selectEvent, setSelectEvent] = useState(null);
+  const [role, setRole] = useState('user'); // Estado para almacenar el rol
+
+  useEffect(() => {
+    // Obtener el rol del usuario desde el almacenamiento local
+    const storedRole = localStorage.getItem('role');
+    if (storedRole) {
+      setRole(storedRole);
+    }
+  }, []);
 
   const handleSelectSlot = (slotInfo) => {
     setShowModal(true);
@@ -129,6 +138,22 @@ export const Agend = () => {
               </div>
             </div>
           </div>
+        </div>
+      )}
+
+      {role === 'admin' && (
+        <div style={{ marginTop: '20px' }}>
+          <h2>Panel de Administración</h2>
+          <p>Aquí puedes gestionar citas y eventos de forma avanzada.</p>
+          {/* Aquí puedes agregar más controles o funcionalidades para administradores */}
+        </div>
+      )}
+
+      {role === 'user' && (
+        <div style={{ marginTop: '20px' }}>
+          <h2>Bienvenido, Usuario</h2>
+          <p>Solo puedes ver y agendar tus citas.</p>
+          {/* Opciones adicionales para usuarios regulares */}
         </div>
       )}
     </div>
