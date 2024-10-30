@@ -5,7 +5,7 @@ import { ListadoTrabajos } from './ListadoTrabajos';
 export const Portafolio = () => {
   return (
     <div className='page'>
-      <h1 className='heading'>Servicos</h1>
+      <h1 className='heading'>Servicios</h1>
 
       <ListadoTrabajos/>
 

@@ -1,5 +1,6 @@
 import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
+import logo from '../../assets/LogoTec.png';
 
 export const HeaderNav = () => {
     const token = localStorage.getItem('token');
@@ -15,7 +16,8 @@ export const HeaderNav = () => {
     return (
         <header className="header">
             <div className="logo" aria-label="Logo del Departamento de Psicología">
-                <span aria-hidden="true">Ψ</span>
+            <img src={logo} alt="Logo" style={{ width: '100px', height: 'auto' }}/>
+                {/*<span aria-hidden="true">Ψ</span>*/}
                 <h3>Departamento de Psicología</h3>
             </div>
 

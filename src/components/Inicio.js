@@ -8,7 +8,7 @@ export const Inicio = () => {
     <div className='home'>
 
       <h1>Hola, somos el <strong> Departamento de Psicologia</strong> del Tecnologico de Libres
-        y ofrecemos los servicios de <strong>psicologia </strong> y canalizacion a los estudintes.
+        y ofrecemos los servicios de <strong>psicologia </strong> y canalizacion a los estudiantes.
       </h1>
 
       <h2 className='title'>
