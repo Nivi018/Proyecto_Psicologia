@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { ExpedienteForm } from './common/ExpedienteFom';
+import React, { useState, useEffect } from 'react';
 
 export const Expediente = () => {
   const [formData, setFormData] = useState({
+    numeroControl: '',
     nombre: '',
     sexo: '',
     edad: '',
@@ -12,11 +12,52 @@ export const Expediente = () => {
     ingenieria: '',
     modalidad: '',
     semestre: '',
-    numeroControl: '',
     fechaRegistro: '',
+    motivoConsulta: '',
+    desencadenantesMotivo: '',
+    planOrientacion: '',
+    seguimiento: '',
     numeroSesiones: '',
   });
 
+  // Función para obtener los datos del usuario
+  const fetchUserData = async (noControl) => {
+    try {
+      const response = await fetch(`http://localhost:3000/api/expediente/getExpediente/${noControl}`, {
+        cache: 'no-store',
+      });
+      if (!response.ok) {
+        throw new Error('Usuario no encontrado');
+      }
+
+      const userData = await response.json();
+      console.log(userData);
+      setFormData((prevData) => ({
+        ...prevData,
+        nombre: userData.nombre || '',
+        sexo: userData.sexo || '',
+        edad: userData.edad || '',
+        estadoCivil: userData.estado_civil || '',
+        direccion: userData.direccion || '',
+        telefono: userData.telefono || '',
+        ingenieria: userData.ingenieria || '',
+        modalidad: userData.modalidad || '',
+        semestre: userData.semestre || '',
+        fechaRegistro: userData.fecha_registro || '',
+      }));
+    } catch (error) {
+      console.error('Error al cargar los datos del usuario:', error);
+    }
+  };
+
+  // Usar useEffect para detectar cambios en numeroControl
+  useEffect(() => {
+    if (formData.numeroControl) {
+      fetchUserData(formData.numeroControl);
+    }
+  }, [formData.numeroControl]);
+
+  // Manejar cambios en el formulario
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
@@ -25,18 +66,13 @@ export const Expediente = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Preparar el objeto JSON para enviar
+    // Enviar solo los datos específicos del expediente
     const expedienteData = {
       no_control: formData.numeroControl,
-      sexo: formData.sexo,
-      edad: Number(formData.edad),
-      estado_civil: formData.estadoCivil,
-      direccion: formData.direccion,
-      telefono: formData.telefono,
-      ingenieria: formData.ingenieria,
-      modalidad: formData.modalidad,
-      semestre: Number(formData.semestre),
-      fecha_registro: formData.fechaRegistro,
+      motivo_consulta: formData.motivoConsulta,
+      desencadenantes_motivo: formData.desencadenantesMotivo,
+      plan_orientacion: formData.planOrientacion,
+      seguimiento: formData.seguimiento,
       numero_sesiones: Number(formData.numeroSesiones),
     };
 
@@ -55,81 +91,64 @@ export const Expediente = () => {
 
       const data = await response.json();
       console.log('Expediente creado:', data);
-      // Aquí podrías manejar el éxito, por ejemplo, redirigir al usuario o mostrar un mensaje
-
     } catch (error) {
       console.error('Error:', error);
-      // Aquí podrías manejar el error, como mostrar un mensaje al usuario
     }
   };
-
-  const formFields = [
-    { label: 'Número de control', type: 'text', name: 'numeroControl', required: true },
-    { label: 'Nombre y apellidos', type: 'text', name: 'nombre', required: true },
-    {
-      label: 'Sexo',
-      type: 'select',
-      name: 'sexo',
-      options: [
-        { value: '', label: 'Selecciona una opción' },
-        { value: 'masculino', label: 'Masculino' },
-        { value: 'femenino', label: 'Femenino' },
-        { value: 'otro', label: 'Otro' },
-      ],
-      required: true,
-    },
-    { label: 'Edad', type: 'number', name: 'edad', required: true, min: 0, max: 100 },
-    {
-      label: 'Estado Civil',
-      type: 'select',
-      name: 'estadoCivil',
-      options: [
-        { value: '', label: 'Selecciona una opción' },
-        { value: 'soltero', label: 'Soltero' },
-        { value: 'casado', label: 'Casado' },
-        { value: 'divorciado', label: 'Divorciado' },
-        { value: 'viudo', label: 'Viudo' },
-      ],
-      required: true,
-    },
-    { label: 'Dirección', type: 'text', name: 'direccion', required: true },
-    {
-      label: 'Teléfono (10 dígitos)',
-      type: 'tel',
-      name: 'telefono',
-      required: true,
-      pattern: '[0-9]{10}',
-      title: 'El número debe contener exactamente 10 dígitos.',
-    },
-    { label: 'Ingeniería', type: 'text', name: 'ingenieria', required: true },
-    { label: 'Modalidad', type: 'text', name: 'modalidad', required: true },
-    { label: 'Semestre', type: 'number', name: 'semestre', required: true, min: 1, max: 12 },
-   
-    { label: 'Fecha de Registro', type: 'date', name: 'fechaRegistro', required: true },
-    { label: 'Número de sesiones', type: 'number', name: 'numeroSesiones', required: true, min: 0 },
-  ];
 
   return (
     <div className='page'>
       <h1>Expediente Psicológico</h1>
       <form onSubmit={handleSubmit}>
         <h2>Datos Generales</h2>
-        {formFields.map((field) => (
-          <ExpedienteForm
-            key={field.name}
-            label={field.label}
-            type={field.type}
-            name={field.name}
-            value={formData[field.name]}
-            onChange={handleChange}
-            required={field.required}
-            options={field.options}
-            min={field.min}
-            max={field.max}
-            pattern={field.pattern}
-            title={field.title}
-          />
-        ))}
+        <label>Número de control:</label>
+        <input type="text" name="numeroControl" value={formData.numeroControl} onChange={handleChange} required />
+
+        <label>Nombre y apellidos:</label>
+        <input type="text" name="nombre" value={formData.nombre} onChange={handleChange} readOnly required />
+
+        <label>Sexo:</label>
+        <input type="text" name="sexo" value={formData.sexo} onChange={handleChange} readOnly required />
+
+        <label>Edad:</label>
+        <input type="number" name="edad" value={formData.edad} onChange={handleChange} readOnly required />
+
+        <label>Estado Civil:</label>
+        <input type="text" name="estadoCivil" value={formData.estadoCivil} onChange={handleChange} readOnly required />
+
+        <label>Dirección:</label>
+        <input type="text" name="direccion" value={formData.direccion} onChange={handleChange} readOnly required />
+
+        <label>Teléfono:</label>
+        <input type="tel" name="telefono" value={formData.telefono} onChange={handleChange} readOnly required />
+
+        <label>Ingeniería:</label>
+        <input type="text" name="ingenieria" value={formData.ingenieria} onChange={handleChange} readOnly required />
+
+        <label>Modalidad:</label>
+        <input type="text" name="modalidad" value={formData.modalidad} onChange={handleChange} readOnly required />
+
+        <label>Semestre:</label>
+        <input type="number" name="semestre" value={formData.semestre} onChange={handleChange} readOnly required />
+
+        <label>Fecha de Registro:</label>
+        <input type="date" name="fechaRegistro" value={formData.fechaRegistro} onChange={handleChange} readOnly required />
+
+        <label>Motivo de Consulta:</label>
+        <input type="text" name="motivoConsulta" value={formData.motivoConsulta} onChange={handleChange} required />
+
+        <label>Desencadenantes del Motivo:</label>
+        <input type="text" name="desencadenantesMotivo" value={formData.desencadenantesMotivo} onChange={handleChange} required />
+
+        <label>Plan de Orientación:</label>
+        <input type="text" name="planOrientacion" value={formData.planOrientacion} onChange={handleChange} required />
+
+        <label>Seguimiento:</label>
+        <input type="text" name="seguimiento" value={formData.seguimiento} onChange={handleChange} required />
+
+        <label>Número de sesiones:</label>
+        <input type="number" name="numeroSesiones" value={formData.numeroSesiones} onChange={handleChange} required min="0" />
+
         <input type="submit" value="Generar Expediente" />
       </form>
     </div>
