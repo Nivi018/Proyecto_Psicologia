@@ -16,7 +16,7 @@ export const HeaderNav = () => {
     return (
         <header className="header">
             <div className="logo" aria-label="Logo del Departamento de Psicología">
-            <img src={logo} alt="Logo" style={{ width: '100px', height: 'auto' }}/>
+                <img src={logo} alt="Logo" style={{ width: '100px', height: 'auto' }} />
                 {/*<span aria-hidden="true">Ψ</span>*/}
                 <h3>Departamento de Psicología</h3>
             </div>
@@ -28,10 +28,6 @@ export const HeaderNav = () => {
                             {/* Rutas comunes para todos los usuarios logueados */}
                             {role === 'admin' && (
                                 <>
-
-
-
-
 
 
                                     {/*qui puedes colocar los NacLink para las rutas de los demas modulos de administrador */}
@@ -72,6 +68,14 @@ export const HeaderNav = () => {
                                     Expediente
                                 </NavLink>
                             </li>
+                            <li>
+                                        <NavLink
+                                            to="/mostrarExpediente"
+                                            className={({ isActive }) => (isActive ? 'active' : '')}
+                                        >
+                                            Ver Expediente
+                                        </NavLink>
+                                    </li>
 
 
                             <li>

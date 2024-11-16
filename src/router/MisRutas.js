@@ -12,6 +12,7 @@ import { Register } from '../components/Register';
 import { RutasPrivadas } from './RutasPrivadas';
 import { Agend } from '../components/Agend';
 import { Expediente } from '../components/Expediente';
+import { MostrarExpediente } from '../components/MostrarExpediente';
 
 export const MisRutas = () => {
   const role = localStorage.getItem('role'); // Obtener el rol del localStorage
@@ -35,6 +36,7 @@ export const MisRutas = () => {
           <Route element={<RutasPrivadas />}>
             <Route path="/agenda" element={<Agend />} />
             <Route path="/expediente" element={role === 'admin' ? <Expediente /> : <Navigate to="/agenda" />} />
+            <Route path="/mostrarExpediente" element={role === 'admin' ? <MostrarExpediente/> : <Navigate to="/agenda" />} />
           </Route>
 
           {/* Ruta para proyectos con parámetros */}

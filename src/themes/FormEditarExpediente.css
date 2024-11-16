@@ -1,0 +1,40 @@
+/* Formulario de edición */
+.expediente-edit-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.expediente-edit-form label {
+    font-size: 0.9em;
+    color: #333;
+}
+
+.expediente-edit-form input {
+    padding: 8px;
+    font-size: 0.9em;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: 100%;
+}
+
+/* Botón Guardar */
+.btn-save {
+    background-color: #2196F3;
+    color: #fff;
+}
+
+.btn-save:hover {
+    background-color: #1976D2;
+}
+
+/* Botón Cancelar */
+.btn-cancel {
+    background-color: #9E9E9E;
+    color: #fff;
+}
+
+.btn-cancel:hover {
+    background-color: #757575;
+}

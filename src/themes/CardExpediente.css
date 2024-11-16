@@ -1,0 +1,76 @@
+.expediente-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 16px;
+    margin: 10px 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    max-width: 100%; /* Increase this value to make the card wider */
+    width: 100%; /* Ensures the card takes full width of its container */
+    transition: box-shadow 0.3s ease;
+}
+
+.expediente-card:hover {
+    box-shadow: 0 6px 12px rgba(19, 187, 75, 0.356);
+}
+
+.expediente-card-title {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.expediente-card p {
+    margin: 6px 0;
+    color: #555;
+}
+
+.expediente-card strong {
+    color: #000;
+}
+/* Botones en la tarjeta */
+.expediente-card-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 15px;
+}
+/* Botones en la tarjeta */
+.expediente-card-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px; /* Espacio entre los botones */
+    margin-top: 15px;
+}
+
+/* Botón base */
+.expediente-card-buttons button {
+    padding: 12px 16px; /* Aumenta el tamaño de los botones */
+    font-size: 1em; /* Incrementa el tamaño del texto */
+    border: none;
+    border-radius: 6px; /* Bordes ligeramente más redondeados */
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+/* Botón Editar */
+.btn-edit {
+    background-color: #4caf50;
+    color: #fff;
+}
+
+.btn-edit:hover {
+    background-color: #45a049;
+    transform: scale(1.1); /* Incrementa el efecto al pasar el cursor */
+}
+
+/* Botón Eliminar */
+.btn-delete {
+    background-color: #f44336;
+    color: #fff;
+}
+
+.btn-delete:hover {
+    background-color: #e53935;
+    transform: scale(1.1); /* Incrementa el efecto al pasar el cursor */
+}
