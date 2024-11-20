@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { fetchExpedienteData } from '../helpers/DataFetchExpediente';
 import { ListarExpediente } from './ListarExpediente';
-import { CircleAnimation } from '../components/UI/CircleAnimation'; // Importamos el componente CircleAnimation
+import { CircleAnimation } from '../components/UI/CircleAnimation'; 
 
 export const MostrarExpediente = () => {
   const [numeroControl, setNumeroControl] = useState('');
@@ -30,7 +30,7 @@ export const MostrarExpediente = () => {
 
   const handleSearch = async () => {
     if (numeroControl) {
-      setLoading(true);  // Mostrar animación de carga
+      setLoading(true);  
       setIsSearching(true);
       setError('');
 
@@ -39,13 +39,13 @@ export const MostrarExpediente = () => {
 
         // Esperamos 2 segundos antes de actualizar el estado
         setTimeout(() => {
-          setResultado(data);  // Actualizamos el resultado después de 2 segundos
-          setLoading(false);    // Detenemos la animación
+          setResultado(data);  
+          setLoading(false);    
           setIsSearching(false);
         }, 2000); // Espera de 2 segundos
       } catch (error) {
         setError(error.message);
-        setLoading(false);  // Detenemos la animación en caso de error
+        setLoading(false);  
         setIsSearching(false);
       }
     } else {

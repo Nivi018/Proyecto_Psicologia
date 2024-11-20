@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { updateExpediente } from '../helpers/UpdateExpediente'; 
-import { deleteExpediente } from '../helpers/DeleteExpediente'; // Nueva función
+import { deleteExpediente } from '../helpers/DeleteExpediente'; 
 import '../themes/CardExpediente.css';
 import { EditarExpediente } from './common/EditarExpediente';
 
@@ -26,8 +26,8 @@ export const ListarExpediente = ({ expediente, onEdit, onDelete }) => {
 
   const handleDelete = async () => {
     try {
-      await deleteExpediente(expediente.id); // Llamada a la función para eliminar el expediente
-      onDelete(expediente.id); // Llamar al callback onDelete para actualizar el estado en el componente padre
+      await deleteExpediente(expediente.id); 
+      onDelete(expediente.id);
     } catch (error) {
       console.error('Error al eliminar el expediente:', error);
     }
