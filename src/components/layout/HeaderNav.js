@@ -25,17 +25,10 @@ export const HeaderNav = () => {
                 <div className="user">
                     <nav>
                         <ul>
-                            {/* Rutas comunes para todos los usuarios logueados */}
-                            {role === 'admin' && (
-                                <>
 
 
-                                    {/*qui puedes colocar los NacLink para las rutas de los demas modulos de administrador */}
-                                </>
-                            )}
 
-
-                            <li>
+                        <li>
                                 <NavLink
                                     to="/inicio"
                                     className={({ isActive }) => (isActive ? 'active' : '')}
@@ -60,7 +53,13 @@ export const HeaderNav = () => {
                                 </NavLink>
                             </li>
 
-                            <li>
+
+
+
+                            {/* Rutas comunes para todos los usuarios logueados */}
+                            {role === 'admin' && (
+                                <>
+                                      <li>
                                 <NavLink
                                     to="/expediente"
                                     className={({ isActive }) => (isActive ? 'active' : '')}
@@ -69,13 +68,21 @@ export const HeaderNav = () => {
                                 </NavLink>
                             </li>
                             <li>
-                                        <NavLink
-                                            to="/mostrarExpediente"
-                                            className={({ isActive }) => (isActive ? 'active' : '')}
-                                        >
-                                            Ver Expediente
-                                        </NavLink>
-                                    </li>
+                                <NavLink
+                                    to="/mostrarExpediente"
+                                    className={({ isActive }) => (isActive ? 'active' : '')}
+                                >
+                                    Ver Expediente
+                                </NavLink>
+                            </li>
+
+                                    {/*qui puedes colocar los NacLink para las rutas de los demas modulos de administrador */}
+                                </>
+                            )}
+
+
+
+                          
 
 
                             <li>
