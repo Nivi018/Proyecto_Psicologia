@@ -40,6 +40,11 @@ export const Expediente = () => {
       if (!user) {
         throw new Error('Datos del usuario no disponibles');
       }
+
+       // Formatear fechaRegistro al formato "yyyy-MM-dd"
+    const formattedDate = user.fecha_registro
+    ? new Date(user.fecha_registro).toISOString().split('T')[0] // Convertir a formato "yyyy-MM-dd"
+    : '';
   
       setFormData((prevData) => ({
         ...prevData,
@@ -52,7 +57,7 @@ export const Expediente = () => {
         ingenieria: user.ingenieria || '',
         modalidad: user.modalidad || '',
         semestre: user.semestre || '',
-        fechaRegistro: user.fecha_registro || '',
+        fechaRegistro: formattedDate,
       }));
   
       console.log("Datos de respuesta:", userData);
