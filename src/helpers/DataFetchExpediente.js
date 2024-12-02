@@ -3,7 +3,7 @@ export const fetchExpedienteData = async (noControl) => {
       const response = await fetch(`http://localhost:3000/api/expediente/expedientes/${noControl}`, {
         cache: 'no-store',
       });
-  
+      
       if (!response.ok) {
         throw new Error('Usuario no encontrado');
       }
@@ -25,3 +25,5 @@ export const fetchExpedienteData = async (noControl) => {
       throw error;
     }
   };
+
+  

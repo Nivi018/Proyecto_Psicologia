@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { fetchExpedienteData } from '../helpers/DataFetchExpediente';
 import { ListarExpediente } from './ListarExpediente';
-import { CircleAnimation } from '../components/UI/CircleAnimation'; 
+import { CircleAnimation } from '../components/UI/CircleAnimation';
+import { PDFDownloadLink } from '@react-pdf/renderer'
+import { ExpedientePDF } from './pdf/ExpedientePDF'
 
-export const MostrarExpediente = () => {
+export const MostrarExpediente = ({}) => {
   const [numeroControl, setNumeroControl] = useState('');
   const [resultado, setResultado] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -30,7 +32,7 @@ export const MostrarExpediente = () => {
 
   const handleSearch = async () => {
     if (numeroControl) {
-      setLoading(true);  
+      setLoading(true);
       setIsSearching(true);
       setError('');
 
@@ -39,13 +41,13 @@ export const MostrarExpediente = () => {
 
         // Esperamos 2 segundos antes de actualizar el estado
         setTimeout(() => {
-          setResultado(data);  
-          setLoading(false);    
+          setResultado(data);
+          setLoading(false);
           setIsSearching(false);
         }, 2000); // Espera de 2 segundos
       } catch (error) {
         setError(error.message);
-        setLoading(false);  
+        setLoading(false);
         setIsSearching(false);
       }
     } else {
@@ -53,7 +55,7 @@ export const MostrarExpediente = () => {
     }
   };
 
-  // Ordenamos los expedientes por numero_sesiones de forma ascendente
+
   const ordenadosExpedientes = resultado?.expedientes?.sort((a, b) => a.numero_sesiones - b.numero_sesiones);
 
   return (
@@ -89,10 +91,12 @@ export const MostrarExpediente = () => {
                 key={index}
                 expediente={expediente}
                 onEdit={handleEditExpediente}
-                onDelete={handleDeleteExpediente} 
+                onDelete={handleDeleteExpediente}
               />
             ))}
           </div>
+         
+
         </div>
       )}
     </div>

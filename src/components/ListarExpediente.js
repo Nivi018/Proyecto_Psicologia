@@ -3,9 +3,10 @@ import { updateExpediente } from '../helpers/UpdateExpediente';
 import { deleteExpediente } from '../helpers/DeleteExpediente'; 
 import '../themes/CardExpediente.css';
 import { EditarExpediente } from './common/EditarExpediente';
+import {PDFDownloadLink} from '@react-pdf/renderer'
+import {ExpedientePDF} from './pdf/ExpedientePDF'
 
-
-export const ListarExpediente = ({ expediente, onEdit, onDelete }) => {
+export const ListarExpediente = ({ expediente, onEdit, onDelete}) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedExpediente, setEditedExpediente] = useState(expediente);
 
@@ -53,7 +54,16 @@ export const ListarExpediente = ({ expediente, onEdit, onDelete }) => {
 
           <div className="expediente-card-buttons">
             <button className="btn-edit" onClick={() => setIsEditing(true)}>Editar</button>
-            <button className="btn-delete" onClick={handleDelete}>Eliminar</button> {/* El botón de eliminar */}
+            <button className="btn-delete" onClick={handleDelete}>Eliminar</button> 
+           
+            <PDFDownloadLink
+              document={<ExpedientePDF expediente={expediente} />}
+              fileName={`Expediente_${expediente.id}.pdf`}
+              className="btn-download-pdf"
+            >
+              {({ loading }) => (loading ? 'Generando PDF...' : 'Descargar PDF')}
+            </PDFDownloadLink>
+
           </div>
         </>
       )}
