@@ -5,8 +5,8 @@
     margin: 10px 0;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     background-color: #fff;
-    max-width: 100%; /* Increase this value to make the card wider */
-    width: 100%; /* Ensures the card takes full width of its container */
+    max-width: 100%; 
+    width: 100%; 
     transition: box-shadow 0.3s ease;
 }
 
@@ -30,47 +30,72 @@
 }
 /* Botones en la tarjeta */
 .expediente-card-buttons {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    margin-top: 15px;
-}
-/* Botones en la tarjeta */
-.expediente-card-buttons {
-    display: flex;
-    justify-content: flex-end;
-    gap: 12px; /* Espacio entre los botones */
-    margin-top: 15px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 15px;
 }
 
-/* Botón base */
-.expediente-card-buttons button {
-    padding: 12px 16px; /* Aumenta el tamaño de los botones */
-    font-size: 1em; /* Incrementa el tamaño del texto */
+/* Estilo común para todos los botones */
+.expediente-card-buttons button{
+  padding: 12px 16px; 
+  height: 50px; 
+  width: 150px; 
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center; 
+}
+
+.btn-download-pdf {
+    margin-top: 15px;
+    padding: 12px 16px; 
+    height: 50px; 
+    width: 150px; 
     border: none;
-    border-radius: 6px; /* Bordes ligeramente más redondeados */
+    border-radius: 6px;
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.2s ease;
-}
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center; 
+  }
 
 /* Botón Editar */
 .btn-edit {
-    background-color: #4caf50;
-    color: #fff;
+  background-color: #4caf50;
+  color: #fff;
+  
 }
 
 .btn-edit:hover {
-    background-color: #45a049;
-    transform: scale(1.1); /* Incrementa el efecto al pasar el cursor */
+  background-color: #45a049;
+  transform: scale(1.1); 
 }
 
 /* Botón Eliminar */
 .btn-delete {
-    background-color: #f44336;
-    color: #fff;
+  background-color: #f44336;
+  color: #fff;
 }
 
 .btn-delete:hover {
-    background-color: #e53935;
-    transform: scale(1.1); /* Incrementa el efecto al pasar el cursor */
+  background-color: #e53935;
+  transform: scale(1.1); 
+}
+
+/* Botón Descargar PDF */
+.btn-download-pdf {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.btn-download-pdf:hover {
+  background-color: #0056b3;
+  transform: scale(1.1); 
 }

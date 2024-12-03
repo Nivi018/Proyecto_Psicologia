@@ -2,17 +2,14 @@ import React, { useState } from 'react';
 import { fetchExpedienteData } from '../helpers/DataFetchExpediente';
 import { ListarExpediente } from './ListarExpediente';
 import { CircleAnimation } from '../components/UI/CircleAnimation';
-import { PDFDownloadLink } from '@react-pdf/renderer'
-import { ExpedientePDF } from './pdf/ExpedientePDF'
 
-export const MostrarExpediente = ({}) => {
+export const MostrarExpediente = ({ }) => {
   const [numeroControl, setNumeroControl] = useState('');
   const [resultado, setResultado] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [isSearching, setIsSearching] = useState(false);
 
-  // Función onEdit para manejar los cambios en los expedientes
   const handleEditExpediente = (updatedExpediente) => {
     setResultado((prevResultado) => ({
       ...prevResultado,
@@ -22,7 +19,6 @@ export const MostrarExpediente = ({}) => {
     }));
   };
 
-  // Función onDelete para manejar la eliminación del expediente
   const handleDeleteExpediente = (id) => {
     setResultado((prevResultado) => ({
       ...prevResultado,
@@ -39,12 +35,11 @@ export const MostrarExpediente = ({}) => {
       try {
         const data = await fetchExpedienteData(numeroControl);
 
-        // Esperamos 2 segundos antes de actualizar el estado
         setTimeout(() => {
           setResultado(data);
           setLoading(false);
           setIsSearching(false);
-        }, 2000); // Espera de 2 segundos
+        }, 2000);
       } catch (error) {
         setError(error.message);
         setLoading(false);
@@ -54,7 +49,6 @@ export const MostrarExpediente = ({}) => {
       setError('Por favor ingrese un número de control');
     }
   };
-
 
   const ordenadosExpedientes = resultado?.expedientes?.sort((a, b) => a.numero_sesiones - b.numero_sesiones);
 
@@ -74,8 +68,7 @@ export const MostrarExpediente = ({}) => {
         </button>
       </div>
 
-      {loading && <CircleAnimation />} {/* Mostrar la animación mientras se busca */}
-
+      {loading && <CircleAnimation />}
       {error && <p className="error-message">{error}</p>}
 
       {resultado && (
@@ -90,13 +83,12 @@ export const MostrarExpediente = ({}) => {
               <ListarExpediente
                 key={index}
                 expediente={expediente}
+                paciente={resultado}  
                 onEdit={handleEditExpediente}
                 onDelete={handleDeleteExpediente}
               />
             ))}
           </div>
-         
-
         </div>
       )}
     </div>

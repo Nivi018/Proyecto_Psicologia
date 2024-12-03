@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { updateExpediente } from '../helpers/UpdateExpediente'; 
-import { deleteExpediente } from '../helpers/DeleteExpediente'; 
+import { updateExpediente } from '../helpers/UpdateExpediente';
+import { deleteExpediente } from '../helpers/DeleteExpediente';
 import '../themes/CardExpediente.css';
 import { EditarExpediente } from './common/EditarExpediente';
-import {PDFDownloadLink} from '@react-pdf/renderer'
-import {ExpedientePDF} from './pdf/ExpedientePDF'
+import { PDFDownloadLink } from '@react-pdf/renderer';
+import { ExpedientePDF } from './pdf/ExpedientePDF';
 
-export const ListarExpediente = ({ expediente, onEdit, onDelete}) => {
+export const ListarExpediente = ({ expediente, onEdit, onDelete, paciente }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedExpediente, setEditedExpediente] = useState(expediente);
 
@@ -18,8 +18,8 @@ export const ListarExpediente = ({ expediente, onEdit, onDelete}) => {
   const handleSave = async () => {
     try {
       const updatedExpediente = await updateExpediente(expediente.id, editedExpediente);
-      onEdit(updatedExpediente); 
-      setIsEditing(false); 
+      onEdit(updatedExpediente);
+      setIsEditing(false);
     } catch (error) {
       console.error('Error al guardar los cambios del expediente:', error);
     }
@@ -27,7 +27,7 @@ export const ListarExpediente = ({ expediente, onEdit, onDelete}) => {
 
   const handleDelete = async () => {
     try {
-      await deleteExpediente(expediente.id); 
+      await deleteExpediente(expediente.id);
       onDelete(expediente.id);
     } catch (error) {
       console.error('Error al eliminar el expediente:', error);
@@ -54,16 +54,15 @@ export const ListarExpediente = ({ expediente, onEdit, onDelete}) => {
 
           <div className="expediente-card-buttons">
             <button className="btn-edit" onClick={() => setIsEditing(true)}>Editar</button>
-            <button className="btn-delete" onClick={handleDelete}>Eliminar</button> 
-           
+            <button className="btn-delete" onClick={handleDelete}>Eliminar</button>
+
             <PDFDownloadLink
-              document={<ExpedientePDF expediente={expediente} />}
-              fileName={`Expediente_${expediente.id}.pdf`}
+              document={<ExpedientePDF expediente={expediente} paciente={paciente} />}
+              fileName={`Expediente_${expediente ? expediente.id : 'desconocido'}.pdf`}
               className="btn-download-pdf"
             >
               {({ loading }) => (loading ? 'Generando PDF...' : 'Descargar PDF')}
             </PDFDownloadLink>
-
           </div>
         </>
       )}

@@ -17,7 +17,14 @@ export const fetchExpedienteData = async (noControl) => {
       return {
         numeroControl: user.no_control,
         nombre: user.nombre,
+        apellido:user.apellido,
+        edad: user.edad,
+        sexo: user.sexo,
+        diereccion:user.diereccion,
+        telefono: user.telefono,
         carrera: user.ingenieria,
+        modalidad: user.modalidad,
+        semestre: user.semestre,
         expedientes: expedientes,
       };
     } catch (error) {
@@ -26,4 +33,3 @@ export const fetchExpedienteData = async (noControl) => {
     }
   };
 
-  
