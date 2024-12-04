@@ -29,8 +29,8 @@ export const Agend = () => {
       if (response?.data) {
         const formattedEvents = response.data.map((event) => ({
           ...event,
-          start: new Date(event.start_time), // Cambiado a start_time
-          end: new Date(event.end_time), // Cambiado a end_time
+          start: new Date(event.start_time),
+          end: new Date(event.end_time),
         }));
         setEvents(formattedEvents);
       }
@@ -40,24 +40,30 @@ export const Agend = () => {
   };
 
   useEffect(() => {
-    const fetchUserData = async () => {
+    const fetchData = async () => {
       try {
-        const storedRole = localStorage.getItem("role");
-        if (storedRole) setRole(storedRole);
-        const response = await axios.get(
-          "http://localhost:3000/api/users/getUserData",
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }
-        );
-        setNoControl(response.data.no_control);
+        const storedRole = localStorage.getItem('role'); // Obtener el rol del almacenamiento
+        setRole(storedRole); // Establecer el rol en el estado
+
+        let response;
+        if (storedRole === 'admin') {
+          response = await axios.get(
+            'http://localhost:3000/api/admin/getAdminData',
+            { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
+          );
+          setNoControl(response.data.no_control);
+        } else {
+          response = await axios.get(
+            'http://localhost:3000/api/users/getUserData',
+            { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
+          );
+          setNoControl(response.data.no_control);
+        }
       } catch (error) {
-        console.error("Error al obtener los datos del usuario:", error);
+        console.error('Error al obtener datos:', error);
       }
     };
-    fetchUserData();
+    fetchData();
   }, []);
 
   useEffect(() => {
@@ -69,19 +75,25 @@ export const Agend = () => {
   const saveEvent = async () => {
     if (eventDescription && selectedDate && eventTime && sessionNumber) {
       const [hours, minutes] = eventTime.split(':');
-      const eventStart = moment(selectedDate).set({ hour: hours, minute: minutes }).toISOString();
+      
+      // Si estamos editando una cita, mantenemos la fecha original
+      const eventStart = selectEvent 
+        ? moment(selectEvent.start).set({ hour: hours, minute: minutes }).toISOString()
+        : moment(selectedDate).set({ hour: hours, minute: minutes }).toISOString();
+        
       const eventEnd = moment(eventStart).add(1, 'hours').toISOString();
+      
       const updatedEvent = {
-        no_control: noControl,
         title: `Sesión ${sessionNumber} - ${eventDescription}`,
         session_number: parseInt(sessionNumber, 10),
         start_time: eventStart,
         end_time: eventEnd,
+        no_control_user: role === "usuario" ? noControl : null,
+        no_control_admin: role === "admin" ? noControl : null,
       };
-  
+      
       try {
         if (selectEvent) {
-          // Si estamos editando una cita
           const response = await axios.put(`${API_URL}/updateEvent/${selectEvent.id}`, updatedEvent);
           if (response.status === 200) {
             setEvents(events.map((event) =>
@@ -94,7 +106,6 @@ export const Agend = () => {
             console.error('Error al actualizar la cita:', response);
           }
         } else {
-          // Si estamos creando una nueva cita
           const response = await axios.post(`${API_URL}/createEvent`, updatedEvent);
           if (response.status === 200 || response.status === 201) {
             setEvents([
@@ -113,8 +124,6 @@ export const Agend = () => {
       alert('Por favor, completa todos los campos antes de guardar.');
     }
   };
-  
-  
 
   const deleteEvent = async () => {
     if (selectEvent) {
@@ -161,7 +170,7 @@ export const Agend = () => {
         localizer={localizer}
         events={events}
         startAccessor="start"
-        endAccessor="end" // Asegúrate de que este campo coincida con el formato de eventos
+        endAccessor="end"
         style={{ margin: "50px" }}
         selectable={true}
         onSelectSlot={handleSelectSlot}
@@ -248,7 +257,7 @@ export const Agend = () => {
           <p>Aquí puedes gestionar citas y eventos de forma avanzada.</p>
         </div>
       )}
-      {role === "user" && (
+      {role === "usuario" && (
         <div style={{ marginTop: "20px" }}>
           <h2>Bienvenido, Usuario</h2>
           <p>Solo puedes ver y agendar tus citas.</p>
