@@ -11,9 +11,10 @@ export const Agend = () => {
   const [events, setEvents] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
-  const [eventDescription, setEventDescription] = useState("");
+  const [eventModality, setEventModality] = useState("");
   const [sessionNumber, setSessionNumber] = useState("");
   const [eventTime, setEventTime] = useState("");
+  const [eventStatus, setEventStatus] = useState(""); // Nuevo estado para el estatus
   const [selectEvent, setSelectEvent] = useState(null);
   const [role, setRole] = useState("user");
   const [noControl, setNoControl] = useState(null);
@@ -73,25 +74,26 @@ export const Agend = () => {
   }, [noControl, role]);
 
   const saveEvent = async () => {
-    if (eventDescription && selectedDate && eventTime && sessionNumber) {
+    if (eventModality && selectedDate && eventTime && sessionNumber) {
       const [hours, minutes] = eventTime.split(':');
       
       // Si estamos editando una cita, mantenemos la fecha original
       const eventStart = selectEvent 
-        ? moment(selectEvent.start).set({ hour: hours, minute: minutes }).toISOString()
-        : moment(selectedDate).set({ hour: hours, minute: minutes }).toISOString();
-        
+        ? moment(selectEvent.start).set({ hour: hours, minute: minutes }).subtract(6, 'hours').toISOString()
+        : moment(selectedDate).set({ hour: hours, minute: minutes }).subtract(6, 'hours').toISOString();
+  
       const eventEnd = moment(eventStart).add(1, 'hours').toISOString();
-      
+  
       const updatedEvent = {
-        title: `Sesión ${sessionNumber} - ${eventDescription}`,
+        title: `Sesión ${sessionNumber} - ${eventModality}`,
         session_number: parseInt(sessionNumber, 10),
         start_time: eventStart,
         end_time: eventEnd,
         no_control_user: role === "usuario" ? noControl : null,
         no_control_admin: role === "admin" ? noControl : null,
+        status: eventStatus // Agregar estatus al evento
       };
-      
+  
       try {
         if (selectEvent) {
           const response = await axios.put(`${API_URL}/updateEvent/${selectEvent.id}`, updatedEvent);
@@ -138,31 +140,60 @@ export const Agend = () => {
   };
 
   const handleSelectSlot = (slotInfo) => {
-    setShowModal(true);
-    setSelectedDate(slotInfo.start);
-    setSelectEvent(null);
-    setEventDescription("");
-    setSessionNumber("");
-    setEventTime("");
+    const today = moment().startOf("day");
+    const selectedDay = moment(slotInfo.start).startOf("day");
+    
+    if (selectedDay.isBefore(today)) {
+      alert("No puedes agendar citas en días anteriores.");
+      return;
+    }
+    
+    if (role === "usuario" || role === "admin") {
+      setShowModal(true);
+      setSelectedDate(slotInfo.start);
+      setSelectEvent(null);
+      setEventModality("");
+      setSessionNumber("");
+      setEventTime("");
+      setEventStatus(""); // Resetear estatus
+    }
   };
-
+  
   const handleSelectEvent = (event) => {
-    setShowModal(true);
-    setSelectEvent(event);
-    setEventDescription(event.title.split(" - ")[1] || "");
-    setSessionNumber(event.session_number || "");
-    setEventTime(moment(event.start).format("HH:mm"));
+    const today = moment().startOf("day");
+    const eventDay = moment(event.start).startOf("day");
+    
+    if (eventDay.isBefore(today)) {
+      alert("No puedes modificar citas en días anteriores.");
+      return;
+    }
+    
+    if (role === "admin") {
+      setShowModal(true);
+      setSelectEvent(event);
+      setEventModality(event.title.split(" - ")[1] || "");
+      setSessionNumber(event.session_number || "");
+      setEventTime(moment(event.start).format("HH:mm"));
+      setEventStatus(event.status || ""); // Cargar estatus
+    } else {
+      //alert("Solo el administrador puede editar o eliminar citas.");
+      setShowModal(true);
+      setSelectEvent(event);
+      setEventModality(event.title.split(" - ")[1] || "");
+      setSessionNumber(event.session_number || "");
+      setEventTime(moment(event.start).format("HH:mm"));
+    }
   };
 
   const generateTimeOptions = () => {
     const options = [];
-    for (let i = 0; i < 24; i++) {
+    for (let i = 8; i <= 16; i++) { // Cambiar el rango a 8 a 20
       const hour = i < 10 ? `0${i}` : i;
       options.push(`${hour}:00`);
       options.push(`${hour}:30`);
     }
     return options;
-  };
+  }
 
   return (
     <div style={{ height: "500px" }}>
@@ -172,7 +203,7 @@ export const Agend = () => {
         startAccessor="start"
         endAccessor="end"
         style={{ margin: "50px" }}
-        selectable={true}
+        selectable={role === "usuario" || role === "admin"} // Solo usuarios y admins pueden seleccionar
         onSelectSlot={handleSelectSlot}
         onSelectEvent={handleSelectEvent}
       />
@@ -202,24 +233,31 @@ export const Agend = () => {
                 ></button>
               </div>
               <div className="modal-body">
-                <label>Descripción:</label>
-                <textarea
+                <label>Modalidad:</label>
+                <select
                   className="form-control"
-                  value={eventDescription}
-                  onChange={(e) => setEventDescription(e.target.value)}
-                />
+                  value={eventModality}
+                  onChange={(e) => setEventModality(e.target.value)}
+                  readOnly={role !== "admin" && selectEvent} // Deshabilitar edición para usuarios
+                >
+                  <option value="">Selecciona una modalidad</option>
+                  <option value="Presencial">Presencial</option>
+                  <option value="Virtual">Virtual</option>
+                </select>
                 <label>No. Sesión:</label>
                 <input
                   type="number"
                   className="form-control"
                   value={sessionNumber}
                   onChange={(e) => setSessionNumber(e.target.value)}
+                  readOnly={role !== "admin" && selectEvent} // Deshabilitar edición para usuarios
                 />
                 <label>Hora:</label>
                 <select
                   className="form-control"
                   value={eventTime}
                   onChange={(e) => setEventTime(e.target.value)}
+                  readOnly={role !== "admin" && selectEvent} // Deshabilitar edición para usuarios
                 >
                   <option value="">Selecciona una hora</option>
                   {generateTimeOptions().map((time) => (
@@ -228,9 +266,31 @@ export const Agend = () => {
                     </option>
                   ))}
                 </select>
+                {role === "admin" && ( // Mostrar campos solo si es administrador
+                  <>
+                    <label>Número de Control:</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={selectEvent ? selectEvent.no_control_user || selectEvent.no_control_admin : noControl} // Usar el número de control del evento seleccionado
+                      readOnly // Solo lectura para el número de control
+                    />
+                    <label>Estatus:</label>
+                    <select
+                      className="form-control"
+                      value={eventStatus}
+                      onChange={(e) => setEventStatus(e.target.value)}
+                    >
+                      <option value="">Selecciona un estatus</option>
+                      <option value="Pendiente">Pendiente</option>
+                      <option value="Confirmado">Confirmado</option>
+                      <option value="Cancelado">Cancelado</option>
+                    </select>
+                  </>
+                )}
               </div>
               <div className="modal-footer">
-                {selectEvent && (
+                {role === "admin" && selectEvent && (
                   <button
                     type="button"
                     className="btn btn-danger me-2"
@@ -239,13 +299,15 @@ export const Agend = () => {
                     Eliminar cita
                   </button>
                 )}
-                <button
-                  type="button"
-                  className="btn btn-primary"
-                  onClick={saveEvent}
-                >
-                  {selectEvent ? "Actualizar cita" : "Guardar cita"}
-                </button>
+                {role === "admin" || !selectEvent ? (
+                  <button
+                    type="button"
+                    className="btn btn-primary"
+                    onClick={saveEvent}
+                  >
+                    {selectEvent ? "Actualizar cita" : "Guardar cita"}
+                  </button>
+                ) : null}
               </div>
             </div>
           </div>
