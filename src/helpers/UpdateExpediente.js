@@ -1,6 +1,6 @@
 export const updateExpediente = async (id, expedienteData) => {
     try {
-      const response = await fetch(`http://localhost:3000/api/expediente/expedienteUpdate/${id}`, {
+      const response = await fetch(`https://back-psico.fly.dev/api/expediente/expedienteUpdate/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

@@ -1,6 +1,6 @@
 export const fetchExpedienteData = async (noControl) => {
     try {
-      const response = await fetch(`http://localhost:3000/api/expediente/expedientes/${noControl}`, {
+      const response = await fetch(`https://back-psico.fly.dev/api/expediente/expedientes/${noControl}`, {
         cache: 'no-store',
       });
       

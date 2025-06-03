@@ -1,6 +1,6 @@
 export const deleteExpediente = async (id) => {
     try {
-      const response = await fetch(`http://localhost:3000/api/expediente/expedienteDelete/${id}`, {
+      const response = await fetch(`https://back-psico.fly.dev/api/expediente/expedienteDelete/${id}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

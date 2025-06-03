@@ -22,7 +22,7 @@ export const Agend = () => {
   const [selectEvent, setSelectEvent] = useState(null);
   const [role, setRole] = useState("user");
   const [noControl, setNoControl] = useState(null);
-  const API_URL = "http://localhost:3000/api/agenda";
+  const API_URL = "https://back-psico.fly.dev/api/agenda";
 
   useEffect(() => {
     if (location.hash) {
@@ -61,13 +61,13 @@ export const Agend = () => {
         let response;
         if (storedRole === 'admin') {
           response = await axios.get(
-            'http://localhost:3000/api/admin/getAdminData',
+            'https://back-psico.fly.dev/api/admin/getAdminData',
             { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
           );
           setNoControl(response.data.no_control);
         } else {
           response = await axios.get(
-            'http://localhost:3000/api/users/getUserData',
+            'https://back-psico.fly.dev/api/users/getUserData',
             { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
           );
           setNoControl(response.data.no_control);

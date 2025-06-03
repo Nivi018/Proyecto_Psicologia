@@ -41,8 +41,8 @@ export const Login = () => {
     try {
       const { email, password } = formData;
       const url = userType === 'admin'
-        ? 'http://localhost:3000/api/admin/loginAdmin'
-        : 'http://localhost:3000/api/users/login';
+        ? 'https://back-psico.fly.dev/api/admin/loginAdmin'
+        : 'https://back-psico.fly.dev/api/users/login';
 
       const response = await axios.post(url, { email, password });
       console.log('Respuesta de la API:', response.data); // Mostrar respuesta completa

@@ -29,7 +29,7 @@ export const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3000/api/users/create', formValues);
+      const response = await axios.post('https://back-psico.fly.dev/api/users/create', formValues);
       if (response.data.success) {
         navigate('/agenda', {
           replace: true,
