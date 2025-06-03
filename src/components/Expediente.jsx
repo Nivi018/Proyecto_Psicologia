@@ -29,23 +29,23 @@ export const Expediente = () => {
       const response = await fetch(`http://localhost:3000/api/expediente/expedientes/${noControl}`, {
         cache: 'no-store',
       });
-  
+
       if (!response.ok) {
         throw new Error('Usuario no encontrado');
       }
-  
+
       const userData = await response.json();
       const user = userData.usuario;
-  
+
       if (!user) {
         throw new Error('Datos del usuario no disponibles');
       }
 
-       // Formatear fechaRegistro al formato "yyyy-MM-dd"
-    const formattedDate = user.fecha_registro
-    ? new Date(user.fecha_registro).toISOString().split('T')[0] // Convertir a formato "yyyy-MM-dd"
-    : '';
-  
+      // Formatear fechaRegistro al formato "yyyy-MM-dd"
+      const formattedDate = user.fecha_registro
+        ? new Date(user.fecha_registro).toISOString().split('T')[0] // Convertir a formato "yyyy-MM-dd"
+        : '';
+
       setFormData((prevData) => ({
         ...prevData,
         nombre: user.nombre || '',
@@ -59,7 +59,7 @@ export const Expediente = () => {
         semestre: user.semestre || '',
         fechaRegistro: formattedDate,
       }));
-  
+
       console.log("Datos de respuesta:", userData);
     } catch (error) {
       console.error('Error al cargar los datos del usuario:', error.message);
@@ -137,60 +137,60 @@ export const Expediente = () => {
   console.log("datos", formData);
 
   return (
-    <div className='form-expediente'>
-      <h1>Expediente Psicológico</h1>
-      <form onSubmit={handleSubmit}>
-        <h2>Datos Generales</h2>
-        <label>Número de control:</label>
-        <input type="text" name="numeroControl" value={numeroControl} onChange={handleChange} required />
+    <div className='form-expediente '>
+      <form className='formegrid formhablemos formhablemos2' onSubmit={handleSubmit}>
+        <div><label>Número de control:</label>
+          <input type="text" name="numeroControl" value={numeroControl} onChange={handleChange} required /></div>
 
-        <label>Nombre y apellidos:</label>
-        <input type="text" name="nombre" value={nombre} onChange={handleChange} readOnly required />
+        <div><label>Nombre y apellidos:</label>
+          <input type="text" name="nombre" value={nombre} onChange={handleChange} readOnly required /></div>
 
-        <label>Sexo:</label>
-        <input type="text" name="sexo" value={sexo} onChange={handleChange} readOnly required />
+        <div><label>Sexo:</label>
+          <input type="text" name="sexo" value={sexo} onChange={handleChange} readOnly required /></div>
 
-        <label>Edad:</label>
-        <input type="number" name="edad" value={edad} onChange={handleChange} readOnly required />
+        <div><label>Edad:</label>
+          <input type="number" name="edad" value={edad} onChange={handleChange} readOnly required /></div>
 
-        <label>Estado Civil:</label>
-        <input type="text" name="estadoCivil" value={estadoCivil} onChange={handleChange} readOnly required />
+        <div><label>Estado Civil:</label>
+          <input type="text" name="estadoCivil" value={estadoCivil} onChange={handleChange} readOnly required /></div>
 
-        <label>Dirección:</label>
-        <input type="text" name="direccion" value={direccion} onChange={handleChange} readOnly required />
+        <div><label>Dirección:</label>
+          <input type="text" name="direccion" value={direccion} onChange={handleChange} readOnly required /></div>
 
-        <label>Teléfono:</label>
-        <input type="tel" name="telefono" value={telefono} onChange={handleChange} readOnly required />
+        <div><label>Teléfono:</label>
+          <input type="tel" name="telefono" value={telefono} onChange={handleChange} readOnly required /></div>
 
-        <label>Ingeniería:</label>
-        <input type="text" name="ingenieria" value={ingenieria} onChange={handleChange} readOnly required />
+        <div><label>Ingeniería:</label>
+          <input type="text" name="ingenieria" value={ingenieria} onChange={handleChange} readOnly required /></div>
 
-        <label>Modalidad:</label>
-        <input type="text" name="modalidad" value={modalidad} onChange={handleChange} readOnly required />
+        <div><label>Modalidad:</label>
+          <input type="text" name="modalidad" value={modalidad} onChange={handleChange} readOnly required /></div>
 
-        <label>Semestre:</label>
-        <input type="number" name="semestre" value={semestre} onChange={handleChange} readOnly required />
+        <div><label>Semestre:</label>
+          <input type="number" name="semestre" value={semestre} onChange={handleChange} readOnly required /></div>
 
-        <label>Fecha de Registro:</label>
-        <input type="date" name="fechaRegistro" value={fechaRegistro} onChange={handleChange} readOnly required />
+        <div><label>Fecha de Registro:</label>
+          <input type="date" name="fechaRegistro" value={fechaRegistro} onChange={handleChange} readOnly required /></div>
 
-        <label>Motivo de Consulta:</label>
-        <input type="text" name="motivoConsulta" value={motivoConsulta} onChange={handleChange} required />
+        <div><label>Motivo de Consulta:</label>
+          <input type="text" name="motivoConsulta" value={motivoConsulta} onChange={handleChange} required /></div>
 
-        <label>Desencadenantes del Motivo:</label>
-        <input type="text" name="desencadenantesMotivo" value={desencadenantesMotivo} onChange={handleChange} required />
+        <div><label>Desencadenantes del Motivo:</label>
+          <input type="text" name="desencadenantesMotivo" value={desencadenantesMotivo} onChange={handleChange} required /></div>
 
-        <label>Plan de Orientación:</label>
-        <input type="text" name="planOrientacion" value={planOrientacion} onChange={handleChange} required />
+        <div><label>Plan de Orientación:</label>
+          <input type="text" name="planOrientacion" value={planOrientacion} onChange={handleChange} required /></div>
 
-        <label>Seguimiento:</label>
-        <input type="text" name="seguimiento" value={seguimiento} onChange={handleChange} required />
+        <div><label>Seguimiento:</label>
+          <input type="text" name="seguimiento" value={seguimiento} onChange={handleChange} required /></div>
 
-        <label>Número de sesiones:</label>
-        <input type="number" name="numeroSesiones" value={numeroSesiones} onChange={handleChange} required min="0" />
+        <div><label>Número de sesiones:</label>
+          <input type="number" name="numeroSesiones" value={numeroSesiones} onChange={handleChange} required min="0" /></div>
 
         <input type="submit" value="Generar Expediente" />
+
       </form>
+      
     </div>
   );
 };

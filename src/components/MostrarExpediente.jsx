@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { fetchExpedienteData } from '../helpers/DataFetchExpediente';
 import { ListarExpediente } from './ListarExpediente';
-import { CircleAnimation } from '../components/UI/CircleAnimation';
+import { CircleAnimation } from './UI/CircleAnimation';
 
 export const MostrarExpediente = ({ }) => {
   const [numeroControl, setNumeroControl] = useState('');
@@ -54,16 +54,14 @@ export const MostrarExpediente = ({ }) => {
 
   return (
     <div className="layout-expediente">
-      <h2 className="heading">Buscar Expediente</h2>
-      <div className="search-container">
+      <div className="search-container formhablemos formhablemos2 ">
         <input
           type="text"
           placeholder="Número de Control"
           value={numeroControl}
           onChange={(e) => setNumeroControl(e.target.value)}
-          className="search-input"
         />
-        <button onClick={handleSearch} className="search-button" disabled={loading}>
+        <button onClick={handleSearch}  disabled={loading}>
           {loading ? 'Buscando...' : 'Buscar'}
         </button>
       </div>
@@ -72,23 +70,25 @@ export const MostrarExpediente = ({ }) => {
       {error && <p className="error-message">{error}</p>}
 
       {resultado && (
-        <div className="result-container">
-          <h3>Resultado:</h3>
-          <p><strong>Número de Control:</strong> {resultado.numeroControl}</p>
-          <p><strong>Nombre:</strong> {resultado.nombre}</p>
-          <p><strong>Carrera:</strong> {resultado.carrera}</p>
-
+        <div className='result-search'>
+          <div className="result-container">
+            <h3>Resultado:</h3>
+            <p><strong>Número de Control:</strong> {resultado.numeroControl}</p>
+            <p><strong>Nombre:</strong> {resultado.nombre}</p>
+            <p><strong>Carrera:</strong> {resultado.carrera}</p>
+          </div>
           <div className="expedientes-list">
             {ordenadosExpedientes && ordenadosExpedientes.map((expediente, index) => (
               <ListarExpediente
                 key={index}
                 expediente={expediente}
-                paciente={resultado}  
+                paciente={resultado}
                 onEdit={handleEditExpediente}
                 onDelete={handleDeleteExpediente}
               />
             ))}
           </div>
+
         </div>
       )}
     </div>

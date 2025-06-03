@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from "react";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import "moment/locale/es";
 import axios from "axios";
+import { Expediente } from './Expediente'
+import { MostrarExpediente } from './MostrarExpediente'
 
 const localizer = momentLocalizer(moment);
 
 export const Agend = () => {
+  const location = useLocation()
   const [events, setEvents] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
@@ -20,6 +24,14 @@ export const Agend = () => {
   const [noControl, setNoControl] = useState(null);
   const API_URL = "http://localhost:3000/api/agenda";
 
+  useEffect(() => {
+    if (location.hash) {
+      const element = document.getElementById(location.hash.substring(1));
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  }, [location]);
   // Función para obtener eventos
   const fetchEvents = async () => {
     try {
@@ -76,14 +88,14 @@ export const Agend = () => {
   const saveEvent = async () => {
     if (eventModality && selectedDate && eventTime && sessionNumber) {
       const [hours, minutes] = eventTime.split(':');
-      
+
       // Si estamos editando una cita, mantenemos la fecha original
-      const eventStart = selectEvent 
+      const eventStart = selectEvent
         ? moment(selectEvent.start).set({ hour: hours, minute: minutes }).subtract(6, 'hours').toISOString()
         : moment(selectedDate).set({ hour: hours, minute: minutes }).subtract(6, 'hours').toISOString();
-  
+
       const eventEnd = moment(eventStart).add(1, 'hours').toISOString();
-  
+
       const updatedEvent = {
         title: `Sesión ${sessionNumber} - ${eventModality}`,
         session_number: parseInt(sessionNumber, 10),
@@ -93,7 +105,7 @@ export const Agend = () => {
         no_control_admin: role === "admin" ? noControl : null,
         status: eventStatus // Agregar estatus al evento
       };
-  
+
       try {
         if (selectEvent) {
           const response = await axios.put(`${API_URL}/updateEvent/${selectEvent.id}`, updatedEvent);
@@ -142,12 +154,12 @@ export const Agend = () => {
   const handleSelectSlot = (slotInfo) => {
     const today = moment().startOf("day");
     const selectedDay = moment(slotInfo.start).startOf("day");
-    
+
     if (selectedDay.isBefore(today)) {
       alert("No puedes agendar citas en días anteriores.");
       return;
     }
-    
+
     if (role === "usuario" || role === "admin") {
       setShowModal(true);
       setSelectedDate(slotInfo.start);
@@ -158,16 +170,16 @@ export const Agend = () => {
       setEventStatus(""); // Resetear estatus
     }
   };
-  
+
   const handleSelectEvent = (event) => {
     const today = moment().startOf("day");
     const eventDay = moment(event.start).startOf("day");
-    
+
     if (eventDay.isBefore(today)) {
       alert("No puedes modificar citas en días anteriores.");
       return;
     }
-    
+
     if (role === "admin") {
       setShowModal(true);
       setSelectEvent(event);
@@ -196,135 +208,176 @@ export const Agend = () => {
   }
 
   return (
-    <div style={{ height: "500px" }}>
-      <Calendar
-        localizer={localizer}
-        events={events}
-        startAccessor="start"
-        endAccessor="end"
-        style={{ margin: "50px" }}
-        selectable={role === "usuario" || role === "admin"} // Solo usuarios y admins pueden seleccionar
-        onSelectSlot={handleSelectSlot}
-        onSelectEvent={handleSelectEvent}
-      />
-      {showModal && (
-        <div
-          className="modal"
-          style={{
-            display: "block",
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            position: "fixed",
-            top: 0,
-            bottom: 0,
-            left: 0,
-            right: 0,
-          }}
-        >
-          <div className="modal-dialog">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title">
-                  {selectEvent ? "Editar cita" : "Agregar cita"}
-                </h5>
-                <button
-                  type="button"
-                  className="btn-close"
-                  onClick={() => setShowModal(false)}
-                ></button>
+    <>
+      <div className="divagenda">
+
+        <div className="titulosagenda">
+          {role === "admin" && (
+            <div >
+              <h2>Panel de Administración</h2>
+              <p>Aquí puedes gestionar citas y eventos de forma avanzada.</p>
+            </div>
+          )}
+          {role === "usuario" && (
+            <div >
+              <h2>Bienvenido, Usuario</h2>
+              <p>Aquí puedes ver y agendar tus citas.</p>
+            </div>
+          )}
+        </div>
+        <hr className="hragenda" />
+        <h2 className="tiagenda">
+          Agenda
+        </h2>
+        <div className="calendario">
+          <Calendar
+            localizer={localizer}
+            events={events}
+            startAccessor="start"
+            endAccessor="end"
+            style={{ margin: "20px" }}
+            selectable={role === "usuario" || role === "admin"} // Solo usuarios y admins pueden seleccionar
+            onSelectSlot={handleSelectSlot}
+            onSelectEvent={handleSelectEvent}
+          />
+        </div>
+
+
+
+        {role === "admin" && (
+          <div>
+            <hr className="hragenda" id="Expediente"/>
+            <h2 className="tiagenda">
+              Generación de expedientes
+            </h2>
+            <div className="extragenda">
+              <div className="expedienteag">
+                <Expediente />
               </div>
-              <div className="modal-body">
-                <label>Modalidad:</label>
-                <select
-                  className="form-control"
-                  value={eventModality}
-                  onChange={(e) => setEventModality(e.target.value)}
-                  readOnly={role !== "admin" && selectEvent} // Deshabilitar edición para usuarios
-                >
-                  <option value="">Selecciona una modalidad</option>
-                  <option value="Presencial">Presencial</option>
-                  <option value="Virtual">Virtual</option>
-                </select>
-                <label>No. Sesión:</label>
-                <input
-                  type="number"
-                  className="form-control"
-                  value={sessionNumber}
-                  onChange={(e) => setSessionNumber(e.target.value)}
-                  readOnly={role !== "admin" && selectEvent} // Deshabilitar edición para usuarios
-                />
-                <label>Hora:</label>
-                <select
-                  className="form-control"
-                  value={eventTime}
-                  onChange={(e) => setEventTime(e.target.value)}
-                  readOnly={role !== "admin" && selectEvent} // Deshabilitar edición para usuarios
-                >
-                  <option value="">Selecciona una hora</option>
-                  {generateTimeOptions().map((time) => (
-                    <option key={time} value={time}>
-                      {time}
-                    </option>
-                  ))}
-                </select>
-                {role === "admin" && ( // Mostrar campos solo si es administrador
-                  <>
-                    <label>Número de Control:</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      value={selectEvent ? selectEvent.no_control_user || selectEvent.no_control_admin : noControl} // Usar el número de control del evento seleccionado
-                      readOnly // Solo lectura para el número de control
-                    />
-                    <label>Estatus:</label>
-                    <select
-                      className="form-control"
-                      value={eventStatus}
-                      onChange={(e) => setEventStatus(e.target.value)}
+              <hr className="hragenda"  />
+              <h2 id="MostrarExpediente" className="tiagenda">
+                Búsqueda de expediente psicológico
+              </h2>
+              <div className="verexpedienteag">
+                <MostrarExpediente />
+              </div>
+
+            </div>
+          </div>
+
+
+        )}
+
+
+        {showModal && (
+          <div
+            className="modal"
+            style={{
+              display: "block",
+              backgroundColor: "rgba(0, 0, 0, 0.5)",
+              position: "fixed",
+              top: 0,
+              bottom: 0,
+              left: 0,
+              right: 0,
+            }}
+          >
+            <div className="modal-dialog">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h5 className="modal-title">
+                    {selectEvent ? "Editar cita" : "Agregar cita"}
+                  </h5>
+                  <button
+                    type="button"
+                    className="btn-close"
+                    onClick={() => setShowModal(false)}
+                  ></button>
+                </div>
+                <div className="modal-body">
+                  <label>Modalidad:</label>
+                  <select
+                    className="form-control"
+                    value={eventModality}
+                    onChange={(e) => setEventModality(e.target.value)}
+                    readOnly={role !== "admin" && selectEvent} // Deshabilitar edición para usuarios
+                  >
+                    <option value="">Selecciona una modalidad</option>
+                    <option value="Presencial">Presencial</option>
+                    <option value="Virtual">Virtual</option>
+                  </select>
+                  <label>No. Sesión:</label>
+                  <input
+                    type="number"
+                    className="form-control"
+                    value={sessionNumber}
+                    onChange={(e) => setSessionNumber(e.target.value)}
+                    readOnly={role !== "admin" && selectEvent} // Deshabilitar edición para usuarios
+                  />
+                  <label>Hora:</label>
+                  <select
+                    className="form-control"
+                    value={eventTime}
+                    onChange={(e) => setEventTime(e.target.value)}
+                    readOnly={role !== "admin" && selectEvent} // Deshabilitar edición para usuarios
+                  >
+                    <option value="">Selecciona una hora</option>
+                    {generateTimeOptions().map((time) => (
+                      <option key={time} value={time}>
+                        {time}
+                      </option>
+                    ))}
+                  </select>
+                  {role === "admin" && ( // Mostrar campos solo si es administrador
+                    <>
+                      <label>Número de Control:</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        value={selectEvent ? selectEvent.no_control_user || selectEvent.no_control_admin : noControl} // Usar el número de control del evento seleccionado
+                        readOnly // Solo lectura para el número de control
+                      />
+                      <label>Estatus:</label>
+                      <select
+                        className="form-control"
+                        value={eventStatus}
+                        onChange={(e) => setEventStatus(e.target.value)}
+                      >
+                        <option value="">Selecciona un estatus</option>
+                        <option value="Pendiente">Pendiente</option>
+                        <option value="Confirmado">Confirmado</option>
+                        <option value="Cancelado">Cancelado</option>
+                      </select>
+                    </>
+                  )}
+                </div>
+                <div className="modal-footer">
+                  {role === "admin" && selectEvent && (
+                    <button
+                      type="button"
+                      className="btn btn-danger me-2"
+                      onClick={deleteEvent}
                     >
-                      <option value="">Selecciona un estatus</option>
-                      <option value="Pendiente">Pendiente</option>
-                      <option value="Confirmado">Confirmado</option>
-                      <option value="Cancelado">Cancelado</option>
-                    </select>
-                  </>
-                )}
-              </div>
-              <div className="modal-footer">
-                {role === "admin" && selectEvent && (
-                  <button
-                    type="button"
-                    className="btn btn-danger me-2"
-                    onClick={deleteEvent}
-                  >
-                    Eliminar cita
-                  </button>
-                )}
-                {role === "admin" || !selectEvent ? (
-                  <button
-                    type="button"
-                    className="btn btn-primary"
-                    onClick={saveEvent}
-                  >
-                    {selectEvent ? "Actualizar cita" : "Guardar cita"}
-                  </button>
-                ) : null}
+                      Eliminar cita
+                    </button>
+                  )}
+                  {role === "admin" || !selectEvent ? (
+                    <button
+                      type="button"
+                      className="btn btn-primary"
+                      onClick={saveEvent}
+                    >
+                      {selectEvent ? "Actualizar cita" : "Guardar cita"}
+                    </button>
+                  ) : null}
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      )}
-      {role === "admin" && (
-        <div style={{ marginTop: "20px" }}>
-          <h2>Panel de Administración</h2>
-          <p>Aquí puedes gestionar citas y eventos de forma avanzada.</p>
-        </div>
-      )}
-      {role === "usuario" && (
-        <div style={{ marginTop: "20px" }}>
-          <h2>Bienvenido, Usuario</h2>
-          <p>Solo puedes ver y agendar tus citas.</p>
-        </div>
-      )}
-    </div>
+        )}
+
+      </div>
+
+    </>
   );
 };

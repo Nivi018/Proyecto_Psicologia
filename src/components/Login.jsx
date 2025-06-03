@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { InputField } from './common/ InputField';
 import { ErrorMessage } from './common/ErrorMessage';
-import {jwtDecode} from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
+import inicio from '../assets/inicio.png';
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -36,32 +37,32 @@ export const Login = () => {
   const onLogin = async (e) => {
     e.preventDefault();
     setError(null);
-  
+
     try {
       const { email, password } = formData;
       const url = userType === 'admin'
         ? 'http://localhost:3000/api/admin/loginAdmin'
         : 'http://localhost:3000/api/users/login';
-  
+
       const response = await axios.post(url, { email, password });
       console.log('Respuesta de la API:', response.data); // Mostrar respuesta completa
-  
+
       if (response.data?.success) {
         const token = response.data.token;
         localStorage.setItem('token', token);
-  
+
         // Decodificar el token para obtener el rol del usuario
         const decodedToken = jwtDecode(token);
         const userRole = decodedToken?.rol; // Asegúrate de que `rol` esté en el token
         const userEmail = decodedToken?.email; // Asegúrate de que `email` esté en el token
-  
+
         if (userRole) {
           localStorage.setItem('role', userRole);
           console.log('Rol del usuario:', userRole); // Ahora debería mostrar el rol correctamente
         } else {
           console.warn('Rol no encontrado en el token');
         }
-  
+
         navigate('/agenda', {
           replace: true,
           state: {
@@ -83,12 +84,19 @@ export const Login = () => {
   };
 
   return (
-    <div className="wrapper">
-      <form onSubmit={onLogin}>
+    <div className="formsign">
+      <div className='imagesign'>
+        <div>
+          <img src={inicio} alt="" />
+        </div>
+
+      </div>
+      <form className='signform signform2' onSubmit={onLogin}>
+        <hr />
         <h1>Iniciar Sesión</h1>
 
         {/* Selección del tipo de usuario */}
-        <div>
+        <div className='signformsel'>
           <label>
             <input
               type="radio"
@@ -131,8 +139,10 @@ export const Login = () => {
 
         {/* Mostrar mensaje de error */}
         <ErrorMessage message={error} />
-
-        <button type="submit">Iniciar Sesión</button>
+        <div className='gridbutton'>
+        <button className="full-width" type="submit">Iniciar Sesión</button>
+        </div>
+        <hr />
       </form>
     </div>
   );

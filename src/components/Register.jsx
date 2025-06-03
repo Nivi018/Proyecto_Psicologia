@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useForm } from '../hook/useForm'; 
+import { useForm } from '../hook/useForm';
 import axios from 'axios';
+import registro from '../assets/registro.png';
 
 export const Register = () => {
   const navigate = useNavigate();
@@ -22,7 +23,7 @@ export const Register = () => {
     fecha_registro: '',
     email: '',
     password: '',
-    rol: 'usuario', 
+    rol: 'usuario',
   });
 
   const handleSubmit = async (e) => {
@@ -47,7 +48,7 @@ export const Register = () => {
   };
 
   const formFields = [
-    { label: 'No. Control', type: 'text', name: 'no_control', required: true },
+
     { label: 'Nombre', type: 'text', name: 'nombre', required: true },
     { label: 'Apellido', type: 'text', name: 'apellido', required: true },
     {
@@ -83,19 +84,20 @@ export const Register = () => {
       pattern: '[0-9]{10}',
       title: 'El número debe contener exactamente 10 dígitos.',
     },
+    { label: 'No. Control', type: 'text', name: 'no_control', required: true },
     {
       label: 'Ingeniería',
       type: 'select',
       name: 'ingenieria',
       options: [
         { value: '', label: 'Selecciona una opción' },
-        { value: 'isc', label: 'ISC' },
-        { value: 'iem', label: 'IEM' },
-        { value: 'id', label: ' ID' },
-        { value: 'iia', label: 'IIA' },
-        { value: 'isa', label: 'ISA' },
-        { value: 'iias', label: 'IIAS' },
-        { value: 'ige', label: 'IGE' },
+        { value: 'isc', label: 'Ing. en Sistemas Computacionales' },
+        { value: 'iem', label: 'Ing. en Electromecánica' },
+        { value: 'iia', label: 'Ing. en Innovación Agrícola Sustentable' },
+        { value: 'isa', label: 'Ing. en Sistemas Automotrices' },
+        { value: 'iias', label: 'Ing. en Industrias Alimentarias' },
+        { value: 'ige', label: 'Ing. en Gestión Empresarial' },
+        { value: 'id', label: ' Ing. Industrial' },
       ],
       required: true,
     },
@@ -117,11 +119,16 @@ export const Register = () => {
   ];
 
   return (
-    <div className='wrapper'>
-      <form onSubmit={handleSubmit}>
-        <h1>Regístrate</h1>
+    <div className='formsign'>
+
+
+      <form className='signform' onSubmit={handleSubmit}>
+        <hr className="full-width" />
+        <h1 className="full-width">Regístrate</h1>
+
         {formFields.map((field) => (
           <div className="input-group" key={field.name}>
+            <label htmlFor={field.name}>{field.label}:</label>
             {field.type !== 'select' ? (
               <input
                 type={field.type}
@@ -151,12 +158,22 @@ export const Register = () => {
                 ))}
               </select>
             )}
-            <label htmlFor={field.name}>{field.label}:</label>
           </div>
         ))}
-        <button type="submit">Registrar</button>
+
+        <button className="full-width" type="submit">Registrarse</button>
+        <hr className="full-width" />
       </form>
+
+      <div className='imagesign'>
+        <div>
+          <img src={registro} alt="" />
+        </div>
+
+      </div>
+
       {error && <p>{error}</p>}
+
     </div>
   );
 };
